@@ -1,4 +1,5 @@
-﻿#NzbMatrix.Net
+﻿NzbMatrix.Net
+=============
 
 This will be a complete wrapper (SDK) for NzbMatrix.com API for .Net
 
