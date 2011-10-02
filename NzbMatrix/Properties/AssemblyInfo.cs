@@ -6,11 +6,11 @@ using System.Runtime.InteropServices;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 [assembly: AssemblyTitle("NzbMatrix")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyDescription("C# Implementation of NzbMatrix.com API")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("Microsoft")]
+[assembly: AssemblyCompany("")]
 [assembly: AssemblyProduct("NzbMatrix")]
-[assembly: AssemblyCopyright("Copyright © Microsoft 2011")]
+[assembly: AssemblyCopyright("WTFPL (http://en.wikipedia.org/wiki/WTFPL)")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
