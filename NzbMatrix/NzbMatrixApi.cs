@@ -11,23 +11,33 @@ namespace NzbMatrix
 {
     internal class NzbMatrixApi
     {
-        internal List<SearchResponse> Search(string query, Categories category)
+        internal List<ISearchResponse> Search(string query, Categories category, bool useHttps = true, int age = -1, int maxHits = 15)
         {
-            return ResponseParser.ParseSearchResponse(MakeQuery("search.php?search=" + query));
+            var queryStringBuilder = new StringBuilder();
+
+            // Format age parameter
+            if (age > -1)
+                queryStringBuilder.Append(string.Format("&age={0}", age));
+
+            queryStringBuilder.Append(string.Format("&maxhits={0}", maxHits));
+
+            return ResponseParser.ParseSearchResponse<ISearchResponse>(
+                                    MakeQuery("search.php?search=" + query, 
+                                    queryStringBuilder.ToString(), 
+                                    useHttps));
         }
 
-        private string MakeQuery(string page, string queryString = "")
+        private string MakeQuery(string page, string queryString = "", bool useHttps = true)
         {
-            // used to build entire input
             var sb = new StringBuilder();
-
-            // used on each read operation
             var buf = new byte[8192];
 
-            const string searchUrl = "https://api.nzbmatrix.com/v1.1/{0}&username={1}&apikey={2}{3}";
+            string http = useHttps ? "https" : "http";
+
+            const string searchUrl = "{0}://api.nzbmatrix.com/v1.1/{1}&username={2}&apikey={3}{4}";
 
 
-            string queryUrl = string.Format(searchUrl, page,
+            string queryUrl = string.Format(searchUrl, http, page,
                                             NzbMatrixApplication.Current.Username,
                                             NzbMatrixApplication.Current.ApiKey,
                                             queryString);
@@ -59,7 +69,7 @@ namespace NzbMatrix
             var result = sb.ToString();
 
             if (result.StartsWith("error"))
-                throw new Exception(sb.ToString());
+                throw new NzbMatrixException(sb.ToString());
 
             return sb.ToString();
         }

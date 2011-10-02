@@ -21,9 +21,9 @@ namespace NzbMatrix
 
         #region Search Api
         
-        public List<SearchResponse> Search(string query, Categories category)
+        public List<ISearchResponse> Search(string query, Categories category = Categories.All)
         {
-            return _api.Search(query, category);
+            return _api.Search(query, category, true, -1, 5);
         }
         
         #endregion
