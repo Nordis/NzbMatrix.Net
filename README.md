@@ -1,7 +1,7 @@
 ﻿NzbMatrix.Net
 =============
 
-This will be a complete wrapper (SDK) for NzbMatrix.com API for .Net
+This will be a complete wrapper (SDK) for NzbMatrix.com API v1.1 for .Net
 
 I'll write documentation and some examples soon.
 
