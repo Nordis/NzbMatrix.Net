@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using NzbMatrix.Responses;
@@ -26,6 +27,15 @@ namespace NzbMatrix
             return _api.Search(query, category, true, -1, 5);
         }
         
+        #endregion
+
+        #region Download API
+        
+        public Stream DownloadNzbFile(int nzbId)
+        {
+            return _api.DownloadNzb(nzbId);
+        }
+
         #endregion
     }
 }

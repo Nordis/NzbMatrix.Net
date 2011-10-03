@@ -53,10 +53,10 @@
     <Compile Include="NzbMatrixClient.cs" />
     <Compile Include="NzbMatrixConfigurationSection.cs" />
     <Compile Include="NzbMatrixException.cs" />
+    <Compile Include="NzbMatrixExtensionMethods.cs" />
     <Compile Include="Parsers\ResponseParser.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Responses\ISearchResponse.cs" />
-    <Compile Include="Responses\SearchResponse.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

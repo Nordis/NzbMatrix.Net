@@ -27,7 +27,7 @@ namespace NzbMatrix.Responses
     public interface ISearchResponse
     {
         [Key("NZBID")]
-        int Id { get; set; }
+        int NzbId { get; set; }
 
         [Key("NZBNAME")]
         string Name { get; set; }
