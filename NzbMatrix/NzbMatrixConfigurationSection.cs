@@ -35,6 +35,16 @@ namespace NzbMatrix
             set { this["apiKey"] = value; }
         }
 
+        /// <summary>
+        /// To use https or not
+        /// </summary>
+        [ConfigurationProperty("useHttp", IsRequired = true)]
+        public bool UseHttps
+        {
+            get { return (bool)this["useHttps"]; }
+            set { this["useHttps"] = value; }
+        }
+
         #endregion
 
         internal static INzbMatrixApplication Current

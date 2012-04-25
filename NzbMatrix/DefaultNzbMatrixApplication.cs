@@ -19,6 +19,11 @@ namespace NzbMatrix
         /// </summary>
         public string ApiKey { get; set; }
 
+        /// <summary>
+        /// To use https or not
+        /// </summary>
+        public bool UseHttps { get; set; }
+
         #endregion
     }
 }
