@@ -24,7 +24,7 @@ namespace NzbMatrix
         
         public List<ISearchResponse> Search(string query, Categories category = Categories.All)
         {
-            return _api.Search(query, category, -1, 5);
+            return _api.Search(query, category);
         }
 
         public List<ISearchResponse> Search(string query, int maxHits, Categories category = Categories.All, int age = -1)
