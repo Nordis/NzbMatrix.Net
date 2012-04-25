@@ -1,9 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Net;
 using System.Text;
+using System.Web;
+
 using NzbMatrix.Parsers;
 using NzbMatrix.Responses;
 
@@ -31,9 +34,58 @@ namespace NzbMatrix
             queryStringBuilder.Append(string.Format("&maxhits={0}", maxHits));
 
             return ResponseParser.ParseSearchResponse<ISearchResponse>(
-                                    MakeQuery("search.php?search=" + query, 
+                                    MakeQuery("search.php?search=" + HttpUtility.UrlEncode(query), 
                                     queryStringBuilder.ToString(), 
                                     useHttps));
+        }
+
+        /// <summary>
+        /// Gets the details of an NZB post.
+        /// </summary>
+        /// <param name="nzbId">NZB ID</param>
+        /// <param name="useHttps">Are we going to use https or not</param>
+        /// <returns>The post information</returns>
+        internal IPostDetailsResponse GetPostDetails(int nzbId, bool useHttps = true)
+        {
+            return ResponseParser.ParseSearchResponse<IPostDetailsResponse>(
+                                    MakeQuery("details.php?id=" + nzbId,
+                                    useHttps: useHttps)).FirstOrDefault();
+        }
+
+        /// <summary>
+        /// Gets the details of your account.
+        /// </summary>
+        /// <param name="useHttps">Are we going to use https or not</param>
+        /// <returns>The account information</returns>
+        internal IAccountResponse GetAccountDetails(bool useHttps = true)
+        {
+            return ResponseParser.ParseSearchResponse<IAccountResponse>(
+                                    MakeQuery("account.php?",
+                                    useHttps: useHttps)).SingleOrDefault();
+        }
+
+        /// <summary>
+        /// Adds or removes a NZB bookmark for your account.
+        /// </summary>
+        /// <param name="action">Add or delete</param>
+        /// <param name="nzbId">NZB ID</param>
+        /// <param name="useHttps">Are we going to use https or not</param>
+        /// <returns>Result code</returns>
+        internal BookmarkCode Bookmark(BookmarkAction action, int nzbId, bool useHttps = true)
+        {
+            var page = string.Format("bookmarks.php?id={0}&action={1}", nzbId, action.ToString().ToLower());
+
+            var response = ResponseParser.ParseSearchResponse<IBookmarksResponse>(
+                                    MakeQuery(page,
+                                    useHttps: useHttps)).SingleOrDefault();
+
+            if (response == null)
+            {
+                return BookmarkCode.Unknown;
+            }
+
+            var bookmarkCode = response.Result.Split(':').Last().Replace("_", string.Empty);
+            return bookmarkCode.ToEnumSafe<BookmarkCode>();
         }
 
         /// <summary>

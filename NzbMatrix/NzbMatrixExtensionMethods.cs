@@ -40,5 +40,12 @@ namespace NzbMatrix
             if (content.StartsWith("error"))
                 throw new NzbMatrixException(content);
         }
+
+        public static T ToEnumSafe<T>(this string value, bool ignoreCase = true)
+            where T : struct
+        {
+            T result;
+            return Enum.TryParse(value, ignoreCase, out result) ? result : default(T);
+        }
     }
 }

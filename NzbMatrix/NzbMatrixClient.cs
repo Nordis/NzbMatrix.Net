@@ -37,5 +37,37 @@ namespace NzbMatrix
         }
 
         #endregion
+
+        #region Post Details API
+
+        public IPostDetailsResponse GetPostDetails(int nzbId)
+        {
+            return _api.GetPostDetails(nzbId);
+        }
+
+        #endregion
+
+        #region Account API
+
+        public IAccountResponse GetAccountDetails()
+        {
+            return _api.GetAccountDetails();
+        }
+
+        #endregion
+
+        #region Bookmarks API
+
+        public BookmarkCode AddBookmark(int nzbId)
+        {
+            return _api.Bookmark(BookmarkAction.Add, nzbId);
+        }
+
+        public BookmarkCode RemoveBookmark(int nzbId)
+        {
+            return _api.Bookmark(BookmarkAction.Remove, nzbId);
+        }
+
+        #endregion
     }
 }
