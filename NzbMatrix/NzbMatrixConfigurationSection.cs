@@ -38,7 +38,7 @@ namespace NzbMatrix
         /// <summary>
         /// To use https or not
         /// </summary>
-        [ConfigurationProperty("useHttp", IsRequired = true)]
+        [ConfigurationProperty("useHttps", IsRequired = true)]
         public bool UseHttps
         {
             get { return (bool)this["useHttps"]; }
