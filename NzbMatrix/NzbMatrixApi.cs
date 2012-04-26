@@ -4,6 +4,8 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using System.Text;
+using System.Web;
+
 using NzbMatrix.Parsers;
 using NzbMatrix.Responses;
 
@@ -16,12 +18,14 @@ namespace NzbMatrix
         /// </summary>
         /// <param name="query"></param>
         /// <param name="category"></param>
-        /// <param name="useHttps"></param>
         /// <param name="age"></param>
         /// <param name="maxHits"></param>
         /// <returns></returns>
-        internal List<ISearchResponse> Search(string query, Categories category, bool useHttps = true, int age = -1, int maxHits = 15)
+        internal List<ISearchResponse> Search(string query, Categories category, int age = -1, int maxHits = 15)
         {
+            if (maxHits > 50)
+                throw new NzbMatrixException("maxHits cannot be more than 50.");
+
             var queryStringBuilder = new StringBuilder();
 
             // Format age parameter
@@ -31,9 +35,51 @@ namespace NzbMatrix
             queryStringBuilder.Append(string.Format("&maxhits={0}", maxHits));
 
             return ResponseParser.ParseSearchResponse<ISearchResponse>(
-                                    MakeQuery("search.php?search=" + query, 
-                                    queryStringBuilder.ToString(), 
-                                    useHttps));
+                                    MakeQuery("search.php?search=" + HttpUtility.UrlEncode(query), 
+                                    queryStringBuilder.ToString()));
+        }
+
+        /// <summary>
+        /// Gets the details of an NZB post.
+        /// </summary>
+        /// <param name="nzbId">NZB ID</param>
+        /// <returns>The post information</returns>
+        internal IPostDetailsResponse GetPostDetails(int nzbId)
+        {
+            return ResponseParser.ParseSearchResponse<IPostDetailsResponse>(
+                                    MakeQuery("details.php?id=" + nzbId)).FirstOrDefault();
+        }
+
+        /// <summary>
+        /// Gets the details of your account.
+        /// </summary>
+        /// <returns>The account information</returns>
+        internal IAccountResponse GetAccountDetails()
+        {
+            return ResponseParser.ParseSearchResponse<IAccountResponse>(
+                                    MakeQuery("account.php?")).SingleOrDefault();
+        }
+
+        /// <summary>
+        /// Adds or removes a NZB bookmark for your account.
+        /// </summary>
+        /// <param name="action">Add or delete</param>
+        /// <param name="nzbId">NZB ID</param>
+        /// <returns>Result code</returns>
+        internal BookmarkCode Bookmark(BookmarkAction action, int nzbId)
+        {
+            var page = string.Format("bookmarks.php?id={0}&action={1}", nzbId, action.ToString().ToLower());
+
+            var response = ResponseParser.ParseSearchResponse<IBookmarksResponse>(
+                                    MakeQuery(page)).SingleOrDefault();
+
+            if (response == null)
+            {
+                return BookmarkCode.Unknown;
+            }
+
+            var bookmarkCode = response.Result.Split(':').Last().Replace("_", string.Empty);
+            return bookmarkCode.ToEnumSafe<BookmarkCode>();
         }
 
         /// <summary>
@@ -52,16 +98,15 @@ namespace NzbMatrix
             return stream;
         }
 
-
         /// <summary>
         /// Makes a query to NzbMatrix with parameters
         /// </summary>
         /// <param name="page">Page to query with correct query string, e.g. search.php?search=</param>
         /// <param name="queryString">Other parameters to pass as query string</param>
-        /// <param name="useHttps">Are we going to use https or not</param>
         /// <returns>Returns response as a string</returns>
-        private string MakeQuery(string page, string queryString = "", bool useHttps = true)
+        private string MakeQuery(string page, string queryString = "")
         {
+            var useHttps = NzbMatrixApplication.Current.UseHttps;
             string http = useHttps ? "https" : "http";
 
             const string searchUrl = "{0}://api.nzbmatrix.com/v1.1/{1}&username={2}&apikey={3}{4}";

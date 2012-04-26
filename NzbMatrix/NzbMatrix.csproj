@@ -37,6 +37,7 @@
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Web" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -44,6 +45,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BookmarkAction.cs" />
+    <Compile Include="BookmarkCodes.cs" />
     <Compile Include="Categories.cs" />
     <Compile Include="DefaultNzbMatrixApplication.cs" />
     <Compile Include="ErrorCodes.cs" />
@@ -56,6 +59,9 @@
     <Compile Include="NzbMatrixExtensionMethods.cs" />
     <Compile Include="Parsers\ResponseParser.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Responses\IAccountResponse.cs" />
+    <Compile Include="Responses\IBookmarksResponse.cs" />
+    <Compile Include="Responses\IPostDetailsResponse.cs" />
     <Compile Include="Responses\ISearchResponse.cs" />
   </ItemGroup>
   <ItemGroup>

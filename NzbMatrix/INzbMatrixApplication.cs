@@ -16,5 +16,10 @@ namespace NzbMatrix
         /// Your API Key
         /// </summary>
         string ApiKey { get; }
+
+        /// <summary>
+        /// To use https or not
+        /// </summary>
+        bool UseHttps { get; }
     }
 }

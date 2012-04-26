@@ -24,9 +24,14 @@ namespace NzbMatrix
         
         public List<ISearchResponse> Search(string query, Categories category = Categories.All)
         {
-            return _api.Search(query, category, true, -1, 5);
+            return _api.Search(query, category);
         }
-        
+
+        public List<ISearchResponse> Search(string query, int maxHits, Categories category = Categories.All, int age = -1)
+        {
+            return _api.Search(query, category, age, maxHits);
+        }
+
         #endregion
 
         #region Download API
@@ -34,6 +39,38 @@ namespace NzbMatrix
         public Stream DownloadNzbFile(int nzbId)
         {
             return _api.DownloadNzb(nzbId);
+        }
+
+        #endregion
+
+        #region Post Details API
+
+        public IPostDetailsResponse GetPostDetails(int nzbId)
+        {
+            return _api.GetPostDetails(nzbId);
+        }
+
+        #endregion
+
+        #region Account API
+
+        public IAccountResponse GetAccountDetails()
+        {
+            return _api.GetAccountDetails();
+        }
+
+        #endregion
+
+        #region Bookmarks API
+
+        public BookmarkCode AddBookmark(int nzbId)
+        {
+            return _api.Bookmark(BookmarkAction.Add, nzbId);
+        }
+
+        public BookmarkCode RemoveBookmark(int nzbId)
+        {
+            return _api.Bookmark(BookmarkAction.Remove, nzbId);
         }
 
         #endregion
